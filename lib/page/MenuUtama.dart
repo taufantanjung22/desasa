@@ -34,7 +34,7 @@ class _MenuUtamaState extends State<MenuUtama> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text("DEAR " + nama),
+              Text("HELLO " + nama),
             ],
           ),
         ),
