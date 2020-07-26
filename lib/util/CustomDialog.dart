@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:sweet_alert_dialogs/sweet_alert_dialogs.dart';
 
 _showCupertinoDialog(BuildContext context) {
   showDialog(
@@ -17,6 +20,66 @@ _showCupertinoDialog(BuildContext context) {
               )
             ],
           ));
+}
+
+_showMaterialDialog(BuildContext context, String type, String msg) {
+  if (type == "success") {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) => new AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0))),
+              contentPadding: EdgeInsets.only(top: 10.0),
+              title: SizedBox(
+                  height: 150,
+                  child: LottieBuilder.asset(
+                    "assets/success.json",
+                    repeat: false,
+                  )),
+              content: Text(
+                msg,
+                style: GoogleFonts.poppins(),
+                textAlign: TextAlign.center,
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Close me!'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
+  } else if (type == "error") {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) => new AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0))),
+              contentPadding: EdgeInsets.only(top: 10.0),
+              title: SizedBox(
+                  height: 150,
+                  child: LottieBuilder.asset(
+                    "assets/error.json",
+                    repeat: false,
+                  )),
+              content: Text(
+                msg,
+                style: GoogleFonts.poppins(),
+                textAlign: TextAlign.center,
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Close me!'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
+  }
 }
 
 ProgressDialog pr;
@@ -112,13 +175,44 @@ _onLoading(BuildContext context) {
   });
 }
 
+_showSweetAlertDialog(BuildContext context) {
+  return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return RichAlertDialog(
+          alertTitle: richTitle("Success"),
+          alertSubtitle: richSubtitle("This is a Sucess alert"),
+          alertType: RichAlertType.SUCCESS,
+          actions: <Widget>[
+            FlatButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      });
+}
+
 class CustomDialog {
   static void foo() {
     print("1234");
   }
 
-  static void showDialog(BuildContext context) {
+  static void showCupertinowDialog(BuildContext context) {
     return _showCupertinoDialog(context);
+  }
+
+  static void showBasicAlertDialog(
+      BuildContext context, String type, String msg) {
+    return _showMaterialDialog(context, type, msg);
   }
 
   static void declarPr(BuildContext context) {
@@ -140,5 +234,10 @@ class CustomDialog {
 
   static void onLoading(BuildContext context) {
     return _onLoading(context);
+  }
+
+  // https://github.com/JideGuru/rich-alert-dialogs
+  static void showSweetAlertDialog(BuildContext context) {
+    return _showSweetAlertDialog(context);
   }
 }

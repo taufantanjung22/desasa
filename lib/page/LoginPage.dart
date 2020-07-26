@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:desasa/request/RequestAPI.dart';
 import 'package:desasa/util/CustomDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +15,15 @@ import 'MenuUtama.dart';
 
 Timer timer;
 
+bool isEmail(String em) {
+  String p =
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+
+  RegExp regExp = new RegExp(p);
+
+  return regExp.hasMatch(em);
+}
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -25,15 +35,6 @@ class _LoginPageState extends State<LoginPage> {
   int number = 0;
 
   bool isShowPassword = false;
-
-  bool isEmail(String em) {
-    String p =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-
-    RegExp regExp = new RegExp(p);
-
-    return regExp.hasMatch(em);
-  }
 
   final _textEmail = TextEditingController();
   final _textPassword = TextEditingController();
@@ -77,6 +78,13 @@ class _LoginPageState extends State<LoginPage> {
               email: _textEmail.text.toString(),
               password: _textPassword.text.toString());
 
+          // var data = await attemptLogin(
+          //     context: context,
+          //     email: "taufan.tanjung@dipa.co.id",
+          //     password: "lantaiem");
+
+          // Navigator.of(context).pop();
+          // print(data);
           if (data != null) {
             if (data['error'] == "NO") {
               Navigator.pushReplacement(context,
@@ -88,34 +96,6 @@ class _LoginPageState extends State<LoginPage> {
         }
 
         getResponseLogin();
-
-        // print(_textEmail.text.toString());
-        // print(_textPassword.text.toString());
-/*
-        percentage = 10;
-        CustomDialog.showProgressDalogue(context);
-
-        const oneSec = const Duration(seconds: 1);
-        timer = new Timer.periodic(oneSec, (Timer t) {
-          // print('hi!' + percentage.toString());
-
-          // JIKA ADA SET STATE JANGAN UPDATE
-          // CustomDialog.updateProgressDialogue(
-          //     context, percentage, "Please Wait..");
-
-          percentage = percentage + 10;
-        });
-
-        Future.delayed(Duration(seconds: 11)).then((onValue) {
-          CustomDialog.hideProgressDialogue(context);
-
-          // JIKA ADA SET STATE JANGAN UPDATE
-          // CustomDialog.updateProgressDialogue(context, 0, "Please Wait..");
-
-          timer.cancel();
-        });
-
-*/
       }
     });
   }
@@ -324,6 +304,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       onPressed: () {
         _showForgotPasswordDialog(context);
+        // CustomDialog.showBasicAlertDialog(context, "success", "Success !");
       },
     );
 
@@ -476,18 +457,24 @@ class DialogForgotPassword extends StatefulWidget {
 class _DialogForgotPasswordState extends State<DialogForgotPassword> {
   final _textEmailForgot = TextEditingController();
   bool _validateEmailForgot = true;
+  bool _validateEmailForgotFormat = true;
   var focusEmailForgot = new FocusNode();
 
   void onClickProcessForgotPassword() {
     setState(() {
       _validateEmailForgot = true;
+      _validateEmailForgotFormat = true;
 
       if (_textEmailForgot.text.isEmpty) {
         _validateEmailForgot = false;
         focusEmailForgot.requestFocus();
         return;
+      } else if (!isEmail(_textEmailForgot.text.toString())) {
+        _validateEmailForgotFormat = false;
+        focusEmailForgot.requestFocus();
       } else {
         _validateEmailForgot = true;
+        _validateEmailForgotFormat = true;
 
         // percentage = 10;
         CustomDialog.showProgressDalogue(context);
@@ -503,8 +490,11 @@ class _DialogForgotPasswordState extends State<DialogForgotPassword> {
           // percentage = percentage + 10;
         });
 
-        Future.delayed(Duration(seconds: 11)).then((onValue) {
+        Future.delayed(Duration(seconds: 5)).then((onValue) {
           CustomDialog.hideProgressDialogue(context);
+
+          CustomDialog.showBasicAlertDialog(
+              context, "success", "Proses berhasil !\nPeriksa Email Anda !");
 
           // JIKA ADA SET STATE JANGAN UPDATE
           // CustomDialog.updateProgressDialogue(context, 0, "Please Wait..");
@@ -543,7 +533,9 @@ class _DialogForgotPasswordState extends State<DialogForgotPassword> {
           filled: true,
           fillColor: Colors.grey[100],
           hintText: 'Email',
-          errorText: (!_validateEmailForgot) ? "Email Can't Be Empty" : null,
+          errorText: (!_validateEmailForgot)
+              ? "Email Can't Be Empty"
+              : (!_validateEmailForgotFormat) ? "Wrong Email Format !" : null,
           contentPadding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -578,6 +570,7 @@ class _DialogForgotPasswordState extends State<DialogForgotPassword> {
   }
 }
 
+/*
 Future<dynamic> attemptLogin(
     {BuildContext context, String email, String password}) async {
   CustomDialog.showProgressDalogue(context);
@@ -643,3 +636,4 @@ void saveDataLogin(
   preferences.setString("KEY_SESSION", session);
   preferences.setString("KEY_REALNAME", isi['REALNAME']);
 }
+*/
