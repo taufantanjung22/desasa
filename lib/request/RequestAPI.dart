@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:desasa/config/Keys.dart';
 import 'package:desasa/config/Urls.dart';
+import 'package:desasa/page/MenuUtama.dart';
+import 'package:drawerbehavior/menu_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:desasa/util/CustomDialog.dart';
 import 'package:flutter/material.dart';
@@ -119,11 +121,46 @@ void saveDataLogin(var isi, String email, String password, String session,
   print(host_id);
   print(host_name);
 
+  setMenu(menu);
+
   print(preferences.getString(Keys.KEY_USER) ?? "No User");
   print(preferences.getString(Keys.KEY_PASS) ?? "No Pass");
   print(preferences.getString(Keys.KEY_NIK) ?? "No NIK");
   print(preferences.getString(Keys.KEY_REALNAME) ?? "No Nama");
   print(preferences.getString(Keys.KEY_HOST) ?? "No Host");
+  print(preferences.getString(Keys.KEY_PROPIC) ?? null);
 
   return data;
+}
+
+void setMenu(List menu) {
+  // print("sasa");
+  // print(menu.length);
+  // print(menu);
+  // print(menu[0]);
+  // print(menu[0]['MENUNAME']);
+  items.clear();
+  // int itemCurrentLength = items.length
+  for (int i = 0; i < menu.length; i++) {
+    items.add(
+      new MenuItem<int>(id: i, title: menu[i]['MENUNAME'], icon: null),
+    );
+  }
+
+  int itemCurrentLength = items.length;
+
+  items.add(new MenuItem<int>(
+      id: itemCurrentLength, title: "Change Password", icon: null));
+
+  String ic = "0xe88e";
+
+  items.add(new MenuItem<int>(
+      id: itemCurrentLength + 1,
+      title: "Logout",
+      icon: IconData(int.parse(ic), fontFamily: 'MaterialIcons')));
+
+  items.add(new MenuItem<int>(
+      id: itemCurrentLength + 2,
+      title: "About",
+      icon: IconData(0xe88e, fontFamily: 'MaterialIcons')));
 }

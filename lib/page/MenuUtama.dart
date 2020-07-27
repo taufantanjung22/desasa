@@ -20,6 +20,7 @@ class _MenuUtamaState extends State<MenuUtama> {
   var User = null;
   var Pass = null;
   var SESSION_STATUS = false;
+  var PICTURE = null;
 
   int selectedMenuItemId;
 
@@ -39,6 +40,11 @@ class _MenuUtamaState extends State<MenuUtama> {
       return pref.getString(Keys.KEY_HOST) ?? "No HOST";
     }
 
+    Future<String> getPicture() async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      return pref.getString(Keys.KEY_PROPIC) ?? null;
+    }
+
     getRealName().then((value) {
       setState(() {
         REAL_NAME = value;
@@ -54,6 +60,12 @@ class _MenuUtamaState extends State<MenuUtama> {
     getHostName().then((value) {
       setState(() {
         HOST = value;
+      });
+    });
+
+    getPicture().then((value) {
+      setState(() {
+        PICTURE = value;
       });
     });
   }
@@ -93,7 +105,8 @@ class _MenuUtamaState extends State<MenuUtama> {
 
   @override
   void initState() {
-    selectedMenuItemId = menuWithIcon.items[0].id;
+    // selectedMenuItemId = menuWithIcon.items[0].id;
+    // selectedMenuItemId = 0;
 
     getUser().then((value) {
       setState(() {
@@ -103,9 +116,6 @@ class _MenuUtamaState extends State<MenuUtama> {
     getPass().then((value) {
       Pass = value;
     });
-
-    items.add(
-        new MenuItem<int>(id: 5, title: "Menu Tambahan", icon: Icons.people));
 
     getStatusSession().then((value) {
       setState(() {
@@ -145,8 +155,11 @@ class _MenuUtamaState extends State<MenuUtama> {
                   decoration: new BoxDecoration(
                       shape: BoxShape.circle,
                       image: new DecorationImage(
-                          fit: BoxFit.fill,
-                          image: AssetImage("images/empty.png")))),
+                          fit: BoxFit.cover,
+                          image: (PICTURE != null && PICTURE != "null")
+                              ? NetworkImage(
+                                  "http://app.mydipa.co.id/" + PICTURE)
+                              : AssetImage("images/empty.png")))),
               Container(
                   margin: EdgeInsets.only(left: 16, top: 30),
                   child: Column(
@@ -277,13 +290,15 @@ class _MenuUtamaState extends State<MenuUtama> {
           direction: Direction.left,
           animation: true,
           alignment: Alignment.topLeft,
-          color: Colors.grey[400],
-          // selectedItemId: selectedMenuItemId,
+          color: Colors.grey[200],
+          selectedItemId: 0,
           onMenuItemSelected: (itemId) {
             setState(() {
+              print(itemId);
+              print(menu.items[itemId].title);
               if (itemId == 0) {
-                // selectedMenuItemId = itemId;
                 // Navigator.pop(context);
+                // selectedMenuItemId = itemId;
               } else if (itemId == 1) {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return AboutActivity();

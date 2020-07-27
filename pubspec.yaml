@@ -35,6 +35,7 @@ dependencies:
   google_fonts: ^1.1.0
   lottie: ^0.4.0+1
   drawerbehavior: ^1.0.3
+  flutter_login: ^1.0.14
 
 dev_dependencies:
   flutter_test:
@@ -59,6 +60,7 @@ flutter:
     - images/hide.png
     - images/kotak.png
     - images/empty.png
+    - images/ecorp-lightblue.png
     - assets/success.json
     - assets/error.json
   #   - images/a_dot_ham.jpeg

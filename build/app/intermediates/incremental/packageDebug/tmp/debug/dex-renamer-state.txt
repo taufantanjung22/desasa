@@ -1,4 +1,4 @@
-#Sun Jul 26 23:34:17 ICT 2020
+#Mon Jul 27 23:36:14 ICT 2020
 base.0=D\:\\Taufan\\Belajar Flutter\\Progress\\desasa\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

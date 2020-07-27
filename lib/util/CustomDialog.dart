@@ -122,10 +122,10 @@ _showPr(BuildContext context) async {
 
 _hidePr(BuildContext context) {
   // METODE 1
-  // pr.hide().whenComplete(() {
-  //   print("pr.isShowing()");
-  //   print(pr.isShowing());
-  // });
+  pr.hide().whenComplete(() {
+    // print("pr.isShowing()");
+    // print(pr.isShowing());
+  });
 
   // METODE 2
   // if (pr.isShowing()) {
@@ -136,7 +136,8 @@ _hidePr(BuildContext context) {
   // }
 
   // METODE 3 RECOMENDED
-  Navigator.of(context).pop();
+  // UPDATE 27 07 2020 ADA BUGS KETIKA HIDDING BERTURUT TURUT
+  // Navigator.of(context).pop();
 }
 
 _updatePr(BuildContext context, double percentage, String message) {
